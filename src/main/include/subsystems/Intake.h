@@ -5,6 +5,7 @@
 #include <frc/filter/Debouncer.h>
 #include <rev/CANSparkMax.h>
 #include <units/voltage.h>
+#include <units/current.h>
 #include <memory>
 
 class Intake : public frc2::SubsystemBase
@@ -18,6 +19,8 @@ public:
     void StopIntake();
     
     bool IsNoteDetected() const;
+
+    units::ampere_t GetIntakeCurrent() const;
 
 private:
     std::unique_ptr<rev::CANSparkMax> m_intakeMotor;

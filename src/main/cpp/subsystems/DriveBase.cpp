@@ -84,18 +84,8 @@ DriveBase::DriveBase(Vision& vision)
     m_headingPID->SetTolerance(headingTolerance.value());
     m_headingPID->EnableContinuousInput(-constants::pi, constants::pi);
 
-    SetDriveControlMode(ControlMode::ClosedLoop);
-
     InitializePreferences();
-    ConfigurePathPlanner();
 
-    frc::SmartDashboard::PutData("Field", &m_field);
-    
-    fmt::print("DriveBase Initialization complete\n\n");
-}
-
-void DriveBase::ConfigurePathPlanner()
-{
     pathplanner::AutoBuilder::configureHolonomic(
         // Get pose
         [this] () { return this->GetPose(); },
@@ -124,6 +114,10 @@ void DriveBase::ConfigurePathPlanner()
 
         this
     );
+    
+    frc::SmartDashboard::PutData("Field", &m_field);
+    
+    fmt::print("DriveBase Initialization complete\n\n");
 }
 
 void DriveBase::Periodic()
@@ -165,14 +159,16 @@ void DriveBase::Drive(frc::ChassisSpeeds chassisSpeeds)
     // If tracking an object, rotate towards
     if(m_tracking)
     {
-        double heading = GetHeading().value();
+        // double heading = GetHeading().value();
 
-        units::radians_per_second_t outputAngularVelocity { -m_headingPID->Calculate(heading) };
+        units::radians_per_second_t outputAngularVelocity { m_headingPID->Calculate(m_angleToObject.value()) };
         outputAngularVelocity += constants::drive::headingPID::ff * util::sign(outputAngularVelocity);
+
+        fmt::print("Output angular velocity: {}\n", outputAngularVelocity);
 
         if(m_headingPID->AtSetpoint())
         {
-            // std::cout << "At setpoint\n";
+            fmt::print("At setpoint\n");
             chassisSpeeds.omega = 0.0_rad_per_s;
         }
         else 
@@ -248,7 +244,8 @@ void DriveBase::VisionUpdate()
 void DriveBase::TrackObject(units::radian_t heading)
 {
     heading = frc::AngleModulus(heading);
-    m_headingPID->SetSetpoint(heading.value());
+    m_angleToObject = heading;
+    //m_headingPID->SetSetpoint(heading.value());
     m_tracking = true;
 }
 
@@ -268,11 +265,11 @@ void DriveBase::SetDriveControlMode(ControlMode controlMode)
     {
         swerveModule->SetControlMode(controlMode);
     }
-    
+
     m_controlMode = controlMode;
 }
 
-ControlMode DriveBase::GetDriveControlMode() const 
+ControlMode DriveBase::GetDriveControlMode() const
 {
     return m_controlMode;
 }

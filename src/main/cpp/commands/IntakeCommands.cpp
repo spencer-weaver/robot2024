@@ -25,6 +25,21 @@ namespace IntakeCommands
         ).ToPtr();
     }
 
+    frc2::CommandPtr NoteRetentionCommand(Intake* intake)
+    {
+        // return frc2::cmd::Run(
+        //     [intake] {
+        //         if(intake->IsNoteDetected() && intake->GetIntakeCurrent() < constants::intake::maxNoteRetentionCurrent)
+        //             intake->RunIntake(constants::intake::noteRetentionPower);
+        //         else 
+        //             intake->StopIntake();
+        //     },
+        //     {intake}
+        // );
+
+        return frc2::cmd::None();
+    }
+
     // frc2::CommandPtr FeedShooter(Intake* intake)
     // {
     //     return frc2::cmd::StartEnd(

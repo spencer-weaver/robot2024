@@ -85,6 +85,7 @@ private:
 
     // PID controller to lock/maintain heading
     std::unique_ptr<frc::PIDController> m_headingPID {};
+    units::radian_t m_angleToObject {};
     bool m_tracking = false;
 
     std::unique_ptr<frc2::sysid::SysIdRoutine> m_sysIdRoutine;

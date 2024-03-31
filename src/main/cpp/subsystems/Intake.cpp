@@ -11,7 +11,7 @@ Intake::Intake()
         ports::intake::intakeMotorCAN, 
         rev::CANSparkMax::MotorType::kBrushless);
 
-    m_intakeMotor->SetIdleMode(rev::CANSparkBase::IdleMode::kCoast);
+    m_intakeMotor->SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
     // m_intakeMotor->SetSmartCurrentLimit(constants::intake::maxCurrent.value());
     // m_intakeMotor->BurnFlash();
     
@@ -24,7 +24,8 @@ Intake::Intake()
 
 void Intake::Periodic()
 {
-    // fmt::print("Intake current: {}\n", m_intakeMotor->GetOutputCurrent());
+    if( m_intakeMotor->GetOutputCurrent() > 0)
+        fmt::print("Intake current: {}\n", m_intakeMotor->GetOutputCurrent());
     frc::SmartDashboard::PutBoolean("Note Detected", IsNoteDetected());
 }
 
@@ -41,4 +42,9 @@ void Intake::StopIntake()
 bool Intake::IsNoteDetected() const
 {
     return m_debouncer->Calculate(m_photoElectricSensor->Get());
+}
+
+units::ampere_t Intake::GetIntakeCurrent() const
+{
+    return units::ampere_t { m_intakeMotor->GetOutputCurrent() };
 }

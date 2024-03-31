@@ -42,7 +42,8 @@ private:
     std::unique_ptr<frc::ProfiledPIDController<units::turns_per_second>> m_rightPID;
 
     //std::unique_ptr<frc::SimpleMotorFeedforward<units::radians>> m_feedForward;
-    std::unique_ptr<frc::SimpleMotorFeedforward<units::turns>> m_feedForward;
+    std::unique_ptr<frc::SimpleMotorFeedforward<units::turns>> m_leftFeedForward;
+    std::unique_ptr<frc::SimpleMotorFeedforward<units::turns>> m_rightFeedForward;
 
     //std::unique_ptr<frc::Debouncer> m_debouncer;
 

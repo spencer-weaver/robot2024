@@ -21,8 +21,8 @@ namespace constants
         constexpr units::revolutions_per_minute_t speakerShootSpeed = 4000.0_rpm;
         constexpr units::revolutions_per_minute_t ampShootSpeed = 1000.0_rpm;
         
-        constexpr units::volt_t speakerShootPower = 7.0_V;
-        constexpr units::volt_t ampShootPower = 2.5_V;
+        constexpr units::volt_t speakerShootPower = 9.0_V;
+        constexpr units::volt_t ampShootPower = 1.8_V;
 
         constexpr units::volt_t maxPIDOutput = 0.25_V;
 
@@ -40,19 +40,26 @@ namespace constants
         // PID constants 
         namespace pid 
         {
-            constexpr double p = 0.2;
+            constexpr double p = 0.3;
             constexpr double i = 0.00;
-            constexpr double d = 0.0;
+            constexpr double d = 0.01;
             constexpr auto v = units::turn_t {400.0} / 1.0_s / 1.0_s;
             constexpr auto a = units::turn_t {800.0} / 1.0_s / 1.0_s / 1.0_s;
-            constexpr units::volt_t maxOutput = 0.3_V;            
+            constexpr units::volt_t maxOutput = 0.2_V;            
         }
 
         // Feedforward constants
-        namespace feedforward 
+        namespace feedforwardLeft
         {
-            constexpr auto s = 0.122_V; 
-            constexpr auto v = 0.117_V * 1.0_s / units::turn_t {1.0};
+            constexpr auto s = 0.123_V; 
+            constexpr auto v = 0.1215_V * 1.0_s / units::turn_t {1.0};
+            constexpr auto a = 0.0_V * 1.0_s * 1.0_s / units::turn_t {1.0};
+        }
+
+        namespace feedforwardRight
+        {
+            constexpr auto s = 0.123_V; 
+            constexpr auto v = 0.11825_V * 1.0_s / units::turn_t {1.0};
             constexpr auto a = 0.0_V * 1.0_s * 1.0_s / units::turn_t {1.0};
         }
     }

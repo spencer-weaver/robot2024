@@ -1,64 +1,72 @@
-// #include "commands/DriveCommand.h"
-// #include "constants/GeneralConstants.h"
-// #include "constants/DriveConstants.h"
-// #include "lib/FieldUtil.h"
-// #include "lib/Util.h"
-// #include <frc/MathUtil.h>
-// #include <units/math.h>
+#include "commands/DriveCommand.h"
+#include "constants/GeneralConstants.h"
+#include "constants/DriveConstants.h"
+#include "lib/FieldUtil.h"
+#include "lib/Util.h"
+#include <frc/MathUtil.h>
+#include <units/math.h>
 
-// frc2::CommandPtr DriveCommand(DriveBase* driveBase, Vision& vision, frc::XboxController& driveController)
-// {
-//     return frc2::cmd::Run(
-//         [&] {
-//             double leftX = frc::ApplyDeadband(driveController.GetLeftX(), constants::controls::joystickDeadband);
-//             double leftY = frc::ApplyDeadband(driveController.GetLeftY(), constants::controls::joystickDeadband);
-//             double rightX = frc::ApplyDeadband(driveController.GetRightX(), constants::controls::joystickDeadband);
+DriveCommand::DriveCommand(DriveBase* driveBase, Vision& vision, frc::XboxController& driveController)
+    : m_driveBase(driveBase), m_vision(vision), m_driveController(driveController)
+{
+    AddRequirements(m_driveBase);
+}
 
-//             units::meters_per_second_t velocityX = util::sign(leftY) * -(leftY * leftY) * constants::drive::maxDriveVelocity;
-//             units::meters_per_second_t velocityY = util::sign(leftX) * -(leftX * leftX) * constants::drive::maxDriveVelocity;
-//             units::radians_per_second_t angularVelocity = util::sign(rightX) * -(rightX * rightX) * constants::drive::maxAngularVelocity;
+void DriveCommand::Execute()
+{
+    double leftX = frc::ApplyDeadband(m_driveController.GetLeftX(), constants::controls::joystickDeadband);
+    double leftY = frc::ApplyDeadband(m_driveController.GetLeftY(), constants::controls::joystickDeadband);
+    double rightX = frc::ApplyDeadband(m_driveController.GetRightX(), constants::controls::joystickDeadband);
 
-//             std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
+    units::meters_per_second_t velocityX = util::sign(leftY) * -std::abs(std::pow(leftY, 2.0)) * constants::drive::maxDriveVelocity;
+    units::meters_per_second_t velocityY = util::sign(leftX) * -std::abs(std::pow(leftX, 2.0)) * constants::drive::maxDriveVelocity;
+    units::radians_per_second_t angularVelocity = util::sign(rightX) * -std::abs(std::pow(rightX, 3.0)) * constants::drive::maxAngularVelocity;
 
-//             if(driveController.GetLeftBumper())
-//             {
-//                 // Note target lock
+    std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
 
-//                 std::optional<units::radian_t> angleToTarget = vision.GetTargetAngle();
-//                 if(angleToTarget)
-//                 {
-//                     fmt::print("Angle to object: {}\n", angleToTarget.value());
-//                     //m_driveBase.TrackObject(angleToTarget.value());
-//                 }
-//                 else 
-//                 {
-//                     fmt::print("No target found\n");
-//                 }
-//             }
-//             else if(driveController.GetRightBumper() && alliance.has_value())
-//             {
-//                 // Speaker/amp target lock
+    if(m_driveController.GetLeftTriggerAxis() > constants::controls::axisDeadband)
+    {
+        // Note target lock
 
-//                 frc::Translation2d currentPosition = driveBase->GetPose().Translation();
+        std::optional<units::radian_t> angleToTarget = m_vision.GetTargetAngle();
+        if(angleToTarget)
+        {
+            fmt::print("Angle to object: {}\n", angleToTarget.value());
+            m_driveBase->TrackObject(angleToTarget.value());
 
-//                 frc::Translation2d speakerPosition = GetSpeakerPosition(alliance.value());
-//                 frc::Translation2d ampPosition = GetSpeakerPosition(alliance.value());
+            velocityY = 0_mps;
+        }
+        else 
+        {
+            fmt::print("No target found\n");
+        }
 
-//                 frc::Translation2d targetPosition = currentPosition.Nearest({ speakerPosition, ampPosition });
-//                 units::radian_t angleToTarget = units::math::atan2(
-//                     targetPosition.Y() - currentPosition.Y(),
-//                     targetPosition.X() - currentPosition.X());
+        // velocityX = util::sign(leftY) * -std::abs(std::pow(leftY, 2.0)) * constants::drive::slowMaxDriveVelocity;
+        // velocityY = util::sign(leftX) * -std::abs(std::pow(leftX, 2.0)) * constants::drive::slowMaxDriveVelocity;
+        // angularVelocity = util::sign(rightX) * -std::abs(std::pow(rightX, 3.0)) * constants::drive::slowMaxAngularVelocity;
 
-//                 // m_driveBase.TrackObject(angleToTarget);
-//             }
-//             else 
-//             {
-//                 driveBase->DisableTracking();
-//             }
+    }
+    else if(m_driveController.GetRightTriggerAxis() > constants::controls::axisDeadband && alliance.has_value())
+    {
+        // Speaker/amp target lock
 
-//             driveBase->Drive(velocityX, velocityY, angularVelocity, !driveBase->IsTrackingEnabled());
-//         },
+        // frc::Translation2d currentPosition = m_driveBase.GetPose().Translation();
 
-//         {driveBase}
-//     );
-// }
+        // frc::Translation2d speakerPosition = GetSpeakerPosition(alliance.value());
+        // frc::Translation2d ampPosition = GetSpeakerPosition(alliance.value());
+
+        // frc::Translation2d targetPosition = currentPosition.Nearest({ speakerPosition, ampPosition });
+        
+        // units::radian_t angleToTarget = units::math::atan2(
+        //     targetPosition.Y() - currentPosition.Y(),
+        //     targetPosition.X() - currentPosition.X());
+
+        // m_driveBase.TrackObject(angleToTarget);
+    }
+    else 
+    {
+        m_driveBase->DisableTracking();
+    }
+
+    m_driveBase->Drive(velocityX, velocityY, angularVelocity, !m_driveBase->IsTrackingEnabled());
+}

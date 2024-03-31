@@ -52,6 +52,7 @@ void Robot::AutonomousExit() {}
 void Robot::TeleopInit() 
 {
   m_container.SetDriveControlMode(ControlMode::OpenLoop);
+  // m_container.SetDriveControlMode(ControlMode::OpenLoop);
 
   if (m_autonomousCommand) 
   {

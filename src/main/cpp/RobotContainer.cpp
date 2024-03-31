@@ -7,8 +7,8 @@
 #include <frc2/command/Commands.h>
 #include <frc2/command/FunctionalCommand.h>
 #include <frc2/command/button/JoystickButton.h>
-#include <frc2/command/button/POVButton.h>
 #include <frc2/command/button/Trigger.h>
+#include <frc2/command/button/POVButton.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
@@ -19,6 +19,7 @@
 #include "commands/DriveCommand.h"
 #include "commands/IntakeCommands.h"
 #include "commands/ShooterCommands.h"
+#include "commands/AmpShooterCommands.h"
 #include "commands/ClimberCommands.h"
 
 #include "constants/GeneralConstants.h"
@@ -47,7 +48,7 @@ RobotContainer::RobotContainer() {
 
   pathplanner::NamedCommands::registerCommand("RunIntake", IntakeCommands::RunIntake(&m_intake).WithTimeout(constants::autonomous::intakeTimeLimit));
   pathplanner::NamedCommands::registerCommand("ShootToSpeaker", ShooterCommands::ShootToSpeaker(&m_shooter, &m_intake));
-  // pathplanner::NamedCommands::registerCommand("RunShooterWheels", ShooterCommands::RunShooterWheels(&m_shooter, constants::shooter::speakerShootSpeed));
+  pathplanner::NamedCommands::registerCommand("RunShooterWheels", ShooterCommands::RunShooterWheels(&m_shooter, constants::shooter::speakerShootSpeed));
 
   // pathplanner::PPHolonomicDriveController::setRotationTargetOverride([this] () {
   //   return m_vision.GetTargetAngle();
@@ -56,64 +57,66 @@ RobotContainer::RobotContainer() {
 
 void RobotContainer::ConfigureDriveControls() 
 {
-  m_driveBase.SetDefaultCommand(frc2::cmd::Run(
-    [this] {
-        double leftX = frc::ApplyDeadband(m_driveController.GetLeftX(), constants::controls::joystickDeadband);
-        double leftY = frc::ApplyDeadband(m_driveController.GetLeftY(), constants::controls::joystickDeadband);
-        double rightX = frc::ApplyDeadband(m_driveController.GetRightX(), constants::controls::joystickDeadband);
+  m_driveBase.SetDefaultCommand(DriveCommand(&m_driveBase, m_vision, m_driveController));
 
-        units::meters_per_second_t velocityX = util::sign(leftY) * -(leftY * leftY) * constants::drive::maxDriveVelocity;
-        units::meters_per_second_t velocityY = util::sign(leftX) * -(leftX * leftX) * constants::drive::maxDriveVelocity;
-        units::radians_per_second_t angularVelocity = -(rightX * rightX * rightX) * constants::drive::maxAngularVelocity;
+  // m_driveBase.SetDefaultCommand(frc2::cmd::Run(
+  //   [this] {
+  //       double leftX = frc::ApplyDeadband(m_driveController.GetLeftX(), constants::controls::joystickDeadband);
+  //       double leftY = frc::ApplyDeadband(m_driveController.GetLeftY(), constants::controls::joystickDeadband);
+  //       double rightX = frc::ApplyDeadband(m_driveController.GetRightX(), constants::controls::joystickDeadband);
 
-        std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
+  //       units::meters_per_second_t velocityX = util::sign(leftY) * -(leftY * leftY) * constants::drive::maxDriveVelocity;
+  //       units::meters_per_second_t velocityY = util::sign(leftX) * -(leftX * leftX) * constants::drive::maxDriveVelocity;
+  //       units::radians_per_second_t angularVelocity = -(rightX * rightX * rightX) * constants::drive::maxAngularVelocity;
 
-        if(m_driveController.GetLeftTriggerAxis() > constants::controls::axisDeadband)
-        {
-            // Note target lock
+  //       std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
 
-            // std::optional<units::radian_t> angleToTarget = m_vision.GetTargetAngle();
-            // if(angleToTarget)
-            // {
-            //     fmt::print("Angle to object: {}\n", angleToTarget.value());
-            //     m_driveBase.TrackObject(angleToTarget.value());
-            // }
-            // else 
-            // {
-            //     fmt::print("No target found\n");
-            // }
+  //       if(m_driveController.GetLeftTriggerAxis() > constants::controls::axisDeadband)
+  //       {
+  //           // Note target lock
 
-            velocityX = util::sign(leftY) * -(leftY * leftY) * constants::drive::slowMaxDriveVelocity;
-            velocityY = util::sign(leftX) * -(leftX * leftX) * constants::drive::slowMaxDriveVelocity;
-            angularVelocity = -(rightX * rightX * rightX) * constants::drive::slowMaxAngularVelocity;
+  //           // std::optional<units::radian_t> angleToTarget = m_vision.GetTargetAngle();
+  //           // if(angleToTarget)
+  //           // {
+  //           //     fmt::print("Angle to object: {}\n", angleToTarget.value());
+  //           //     m_driveBase.TrackObject(angleToTarget.value());
+  //           // }
+  //           // else 
+  //           // {
+  //           //     fmt::print("No target found\n");
+  //           // }
 
-        }
-        else if(m_driveController.GetRightTriggerAxis() > constants::controls::axisDeadband && alliance.has_value())
-        {
-            // Speaker/amp target lock
+  //           velocityX = util::sign(leftY) * -(leftY * leftY) * constants::drive::slowMaxDriveVelocity;
+  //           velocityY = util::sign(leftX) * -(leftX * leftX) * constants::drive::slowMaxDriveVelocity;
+  //           angularVelocity = -(rightX * rightX * rightX) * constants::drive::slowMaxAngularVelocity;
 
-            // frc::Translation2d currentPosition = m_driveBase.GetPose().Translation();
+  //       }
+  //       else if(m_driveController.GetRightTriggerAxis() > constants::controls::axisDeadband && alliance.has_value())
+  //       {
+  //           // Speaker/amp target lock
 
-            // frc::Translation2d speakerPosition = GetSpeakerPosition(alliance.value());
-            // frc::Translation2d ampPosition = GetSpeakerPosition(alliance.value());
+  //           // frc::Translation2d currentPosition = m_driveBase.GetPose().Translation();
 
-            // frc::Translation2d targetPosition = currentPosition.Nearest({ speakerPosition, ampPosition });
+  //           // frc::Translation2d speakerPosition = GetSpeakerPosition(alliance.value());
+  //           // frc::Translation2d ampPosition = GetSpeakerPosition(alliance.value());
+
+  //           // frc::Translation2d targetPosition = currentPosition.Nearest({ speakerPosition, ampPosition });
             
-            // units::radian_t angleToTarget = units::math::atan2(
-            //     targetPosition.Y() - currentPosition.Y(),
-            //     targetPosition.X() - currentPosition.X());
+  //           // units::radian_t angleToTarget = units::math::atan2(
+  //           //     targetPosition.Y() - currentPosition.Y(),
+  //           //     targetPosition.X() - currentPosition.X());
 
-            // m_driveBase.TrackObject(angleToTarget);
-        }
-        else 
-        {
-            m_driveBase.DisableTracking();
-        }
+  //           // m_driveBase.TrackObject(angleToTarget);
+  //       }
+  //       else 
+  //       {
+  //           m_driveBase.DisableTracking();
+  //       }
 
-        m_driveBase.Drive(velocityX, velocityY, angularVelocity, !m_driveBase.IsTrackingEnabled());
-    },
-    {&m_driveBase}
-  ));
+  //       m_driveBase.Drive(velocityX, velocityY, angularVelocity, !m_driveBase.IsTrackingEnabled());
+  //   },
+  //   {&m_driveBase}
+  // ));
 
   frc2::JoystickButton(&m_driveController, frc::XboxController::Button::kX)
     .OnTrue(frc2::cmd::RunOnce([this] { m_driveBase.ZeroHeading(); }, {}));
@@ -121,21 +124,30 @@ void RobotContainer::ConfigureDriveControls()
 
 void RobotContainer::ConfigureShooterControls()
 {
+  // m_intake.SetDefaultCommand(IntakeCommands::NoteRetentionCommand(&m_intake));
+
   // Run intake while A is held
   frc2::JoystickButton(&m_shooterController, frc::XboxController::Button::kA)
     .WhileTrue(IntakeCommands::RunIntake(&m_intake));
 
+  // Run shooter wheels when D-pad pressed up
+  // frc2::Trigger([this] { return m_shooterController.GetPOV() == 0; })
+  //   .WhileTrue(ShooterCommands::RunShooterWheels(&m_shooter, constants::shooter::speakerShootSpeeed));
+
+  frc2::POVButton(&m_shooterController, 0)
+    .WhileTrue(ShooterCommands::RunShooterWheels(&m_shooter, constants::shooter::speakerShootSpeed))
+    .OnFalse(ShooterCommands::StopShooterWheels(&m_shooter));
+
   // Shoot to speaker with X
   frc2::JoystickButton(&m_shooterController, frc::XboxController::Button::kX)
-     .OnTrue(ShooterCommands::ShootToSpeaker(&m_shooter, &m_intake));
-     //.OnTrue(ShooterCommands::Shoot(&m_shooter, &m_intake, 1000_rpm));
+    .OnTrue(ShooterCommands::ShootToSpeaker(&m_shooter, &m_intake));
+    //.OnTrue(ShooterCommands::Shoot(&m_shooter, &m_intake, 1000_rpm));
     
-  // Shoot to amp with Y
+  // Shoot across field
   frc2::JoystickButton(&m_shooterController, frc::XboxController::Button::kY)
-    .OnTrue(ShooterCommands::ShootToAmp(&m_shooter, &m_intake));
-    //.OnTrue(ShooterCommands::RunShooterWheels(&m_shooter, 800_rpm));
-    // .OnTrue(ShooterCommands::RunShooterWheels(&m_shooter, 2000_rpm))
-    // .OnFalse(ShooterCommands::StopShooterWheels(&m_shooter));
+    .OnTrue(ShooterCommands::Shoot(&m_shooter, &m_intake, 5250_rpm));
+    //.OnTrue(ShooterCommands::ShootToAmp(&m_shooter, &m_intake));
+    //.OnFalse(ShooterCommands::StopShooterWheels(&m_shooter));
 
   // Eject from intake with B
   frc2::JoystickButton(&m_shooterController, frc::XboxController::Button::kB)
@@ -143,9 +155,13 @@ void RobotContainer::ConfigureShooterControls()
     .OnFalse(IntakeCommands::StopIntake(&m_intake))
     .OnFalse(ShooterCommands::StopFeeder(&m_shooter));
 
-  // Intake from shooter with left trigger
-  frc2::Trigger([this] { return m_shooterController.GetLeftTriggerAxis() > constants::controls::axisDeadband; })
-    .WhileTrue(ShooterCommands::ShooterIntake(&m_shooter, &m_intake));
+  // Amp intake with left trigger
+  // frc2::Trigger([this] { return m_shooterController.GetLeftTriggerAxis() > constants::controls::axisDeadband; })
+  //   .WhileTrue(AmpShooterCommands::RunIntake(&m_ampShooter));
+
+  // // Amp shoot with right trigger    
+  // frc2::Trigger([this] { return m_shooterController.GetRightTriggerAxis() > constants::controls::axisDeadband; })
+  //   .OnTrue(AmpShooterCommands::Outtake(&m_ampShooter));
 
   // Raise climber with left bumper
   frc2::JoystickButton(&m_shooterController, frc::XboxController::Button::kLeftBumper)
@@ -156,9 +172,6 @@ void RobotContainer::ConfigureShooterControls()
   frc2::JoystickButton(&m_shooterController, frc::XboxController::Button::kRightBumper)
     .OnTrue(ClimberCommands::LowerHook(&m_climber))
     .OnFalse(ClimberCommands::StopClimber(&m_climber));
-
-  frc2::POVButton(&m_shooterController, 0)
-    .WhileTrue(ShooterCommands::RunShooterWheels(&m_shooter, constants::shooter::speakerShootSpeed));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
@@ -177,11 +190,6 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   return pathplanner::PathPlannerAuto(autoName).ToPtr()
     .OnlyWhile([&] { return m_driveBase.IsNavXAvailable(); })
     .FinallyDo([&] { m_driveBase.Stop(); });
-}
-
-void RobotContainer::ConfigurePathPlanner()
-{
-  m_driveBase.ConfigurePathPlanner();
 }
 
 void RobotContainer::InitSysId()

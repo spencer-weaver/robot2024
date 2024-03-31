@@ -9,6 +9,8 @@ namespace IntakeCommands
     // Runs the intake until a note is detected
     frc2::CommandPtr RunIntake(Intake* intake);
 
+    frc2::CommandPtr NoteRetentionCommand(Intake* intake);
+
     // Feeds note from intake into the shooter
     // frc2::CommandPtr FeedShooter(Intake* intake);
 

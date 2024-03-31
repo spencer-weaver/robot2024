@@ -12,6 +12,7 @@
 #include "subsystems/DriveBase.h"
 #include "subsystems/Intake.h"
 #include "subsystems/Shooter.h"
+#include "subsystems/AmpShooter.h"
 #include "subsystems/Climber.h"
 #include "lib/Vision.h"
 #include "lib/NavX.h"
@@ -42,6 +43,7 @@ class RobotContainer {
   DriveBase m_driveBase {m_vision};
   Intake m_intake {};
   Shooter m_shooter {};
+  // AmpShooter m_ampShooter {};
   Climber m_climber {m_pdh};
 
   frc::SendableChooser<std::string> m_autoChooser;

@@ -20,6 +20,8 @@ namespace constants
             "Top - Three Note",
             "Middle - Two Note",
             "Middle - Three Note Top",
+            "Middle - Three Note Bottom",
+            "Middle - Four Note",
             "Bottom - Two Note",
             "Bottom - Two Note Far",
             "Bottom - Three Note"

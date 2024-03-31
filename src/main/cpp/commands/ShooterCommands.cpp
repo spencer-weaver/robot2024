@@ -69,36 +69,37 @@ namespace ShooterCommands
     {
         // return ShooterCommands::RunShooterWheels(shooter, 1000_rpm);
         //return ShooterCommands::Shoot(shooter, intake, constants::shooter::speakerShootPower);
-        return ShooterCommands::RunShooterWheelsConstantVoltage(shooter, constants::shooter::speakerShootPower)
-            .AndThen(frc2::cmd::Wait(0.75_s))
-            .AndThen(
-                IntakeCommands::RunFeeder(intake)
-                    .AlongWith(ShooterCommands::RunFeeder(shooter))
-            )
-            .AndThen(frc2::cmd::Wait(0.7_s))
-            .FinallyDo([intake, shooter] {
-                intake->StopIntake();
-                shooter->StopShooter();
-                shooter->StopFeeder();
-            });
+        // return ShooterCommands::RunShooterWheelsConstantVoltage(shooter, constants::shooter::speakerShootPower)
+        //     .AndThen(frc2::cmd::Wait(0.75_s))
+        //     .AndThen(
+        //         IntakeCommands::RunFeeder(intake)
+        //             .AlongWith(ShooterCommands::RunFeeder(shooter))
+        //     )
+        //     .AndThen(frc2::cmd::Wait(0.7_s))
+        //     .FinallyDo([intake, shooter] {
+        //         intake->StopIntake();
+        //         shooter->StopShooter();
+        //         shooter->StopFeeder();
+        //     });
+        return ShooterCommands::Shoot(shooter, intake, constants::shooter::speakerShootSpeed);
     }
 
     frc2::CommandPtr ShootToAmp(Shooter* shooter, Intake* intake)
     {
-        return ShooterCommands::RunShooterWheelsConstantVoltage(shooter, constants::shooter::ampShootPower)
-            .AndThen(frc2::cmd::Wait(0.65_s))
-            .AndThen(
-                IntakeCommands::RunFeeder(intake)
-                    .AlongWith(ShooterCommands::RunFeeder(shooter))
-            )
-            .AndThen(frc2::cmd::Wait(0.75_s))
-            .FinallyDo([intake, shooter] {
-                intake->StopIntake();
-                shooter->StopShooter();
-                shooter->StopFeeder();
-            });
+        // return ShooterCommands::RunShooterWheelsConstantVoltage(shooter, constants::shooter::ampShootPower)
+        //     .AndThen(frc2::cmd::Wait(0.65_s))
+        //     .AndThen(
+        //         IntakeCommands::RunFeeder(intake)
+        //             .AlongWith(ShooterCommands::RunFeeder(shooter))
+        //     )
+        //     .AndThen(frc2::cmd::Wait(0.75_s))
+        //     .FinallyDo([intake, shooter] {
+        //         intake->StopIntake();
+        //         shooter->StopShooter();
+        //         shooter->StopFeeder();
+        //     });
         //return ShooterCommands::Shoot(shooter, intake, constants::shooter::ampShootPower);
-        // return ShooterCommands::Shoot(shooter, intake, constants::shooter::ampShootSpeed);
+        return ShooterCommands::Shoot(shooter, intake, constants::shooter::ampShootSpeed);
     }
 
     frc2::CommandPtr ShooterIntake(Shooter* shooter, Intake* intake)

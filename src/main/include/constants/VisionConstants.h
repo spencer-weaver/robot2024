@@ -36,16 +36,14 @@ namespace constants
         {
             constexpr std::string_view name = "Front Arducam";
             const frc::Translation3d relativePosition {2.0_in, -6.25_in, 16.0_in};
-            const frc::Rotation3d relativeRotation {0_deg, -27.0_deg, 0.0_deg};
+            const frc::Rotation3d relativeRotation {180_deg, -26.0_deg, 0.0_deg};
         }
 
         namespace backCamera
         {
             constexpr std::string_view name = "Back Arducam";
-            const frc::Translation3d relativePosition {-12.75_in, 7.0_in, 9.5_in};
-            const frc::Rotation3d relativeRotation {0_deg, -28.0_deg, 180.0_deg};
-
-            // 28 deg back
+            const frc::Translation3d relativePosition {-13.5_in, 6.25_in, 9.5_in};
+            const frc::Rotation3d relativeRotation {180_deg, -29.0_deg, 180.0_deg};
         }
 
         namespace objectCamera 

@@ -4,6 +4,7 @@
 
 #include <units/voltage.h>
 #include <frc/RobotController.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
 
 Shooter::Shooter()
@@ -66,10 +67,16 @@ Shooter::Shooter()
         ));
     m_rightPID->SetTolerance(units::turns_per_second_t {1.0});
 
-    m_feedForward = std::make_unique<frc::SimpleMotorFeedforward<units::turns>>(
-        constants::shooter::feedforward::s,
-        constants::shooter::feedforward::v,
-        constants::shooter::feedforward::a
+    m_leftFeedForward = std::make_unique<frc::SimpleMotorFeedforward<units::turns>>(
+        constants::shooter::feedforwardLeft::s,
+        constants::shooter::feedforwardLeft::v,
+        constants::shooter::feedforwardLeft::a
+    );
+
+    m_rightFeedForward = std::make_unique<frc::SimpleMotorFeedforward<units::turns>>(
+        constants::shooter::feedforwardRight::s,
+        constants::shooter::feedforwardRight::v,
+        constants::shooter::feedforwardRight::a
     );
 
     fmt::print("Shooter Initialization complete\n\n");
@@ -82,24 +89,27 @@ void Shooter::Periodic()
 
     units::volt_t leftOutputPID { m_leftPID->Calculate(leftSpeed) };
     leftOutputPID = std::clamp(leftOutputPID, -constants::shooter::pid::maxOutput, constants::shooter::pid::maxOutput);
-    units::volt_t leftOutputFF = m_feedForward->Calculate(m_leftPID->GetSetpoint().position);
+    units::volt_t leftOutputFF = m_leftFeedForward->Calculate(m_leftPID->GetSetpoint().position);
     units::volt_t leftOutput = leftOutputPID + leftOutputFF;
     leftOutput = std::clamp(leftOutput, -constants::shooter::maxVoltage, constants::shooter::maxVoltage);
 
     units::volt_t rightOutputPID { m_rightPID->Calculate(rightSpeed) };
     rightOutputPID = std::clamp(rightOutputPID, -constants::shooter::pid::maxOutput, constants::shooter::pid::maxOutput);
-    units::volt_t rightOutputFF = m_feedForward->Calculate(m_rightPID->GetSetpoint().position);
+    units::volt_t rightOutputFF = m_rightFeedForward->Calculate(m_rightPID->GetSetpoint().position);
     units::volt_t rightOutput = rightOutputPID + rightOutputFF;
     rightOutput = std::clamp(rightOutput, -constants::shooter::maxVoltage, constants::shooter::maxVoltage);
 
     
-    if(std::abs(m_leftEncoder->GetVelocity()) + std::abs(m_rightEncoder->GetVelocity()) > 10)
+    if(std::abs(m_leftEncoder->GetVelocity()) + std::abs(m_rightEncoder->GetVelocity()) > 1000)
     {
-        fmt::print("Left: {}       Right: {}\n", leftSpeed, rightSpeed);
+        fmt::print("Left: {}, {}       Right: {}\n", units::revolutions_per_minute_t {leftSpeed}, leftOutputPID, units::revolutions_per_minute_t {rightSpeed});
     }
+
+    frc::SmartDashboard::PutNumber("Shooter RPM Left", units::revolutions_per_minute_t { units::turns_per_second_t {m_leftEncoder->GetVelocity()}}.value());
+    frc::SmartDashboard::PutNumber("Shooter RPM Right", units::revolutions_per_minute_t { units::turns_per_second_t {m_leftEncoder->GetVelocity()}}.value());
  
-    // m_leftMotor->SetVoltage(leftOutput);
-    // m_rightMotor->SetVoltage(rightOutput);
+    m_leftMotor->SetVoltage(leftOutput);
+    m_rightMotor->SetVoltage(rightOutput);
 }
 
 void Shooter::SetShooterVoltage(const units::volt_t voltage)

@@ -47,6 +47,11 @@ namespace ports
         constexpr int motorTwoCAN = 19;
     }
 
+    namespace ampShooter
+    {
+        constexpr int motorCAN = 20;
+    }
+
     namespace dio 
     {
         constexpr int photoElectricSensor = 0;

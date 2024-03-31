@@ -11,11 +11,11 @@ namespace constants
     namespace drive 
     {
         // Motor voltage limits
-        constexpr units::volt_t maxDriveVoltage = 11.5_V;
+        constexpr units::volt_t maxDriveVoltage = 12.0_V;
         constexpr units::volt_t maxTurnVoltage = 9.0_V;
         
         // Maximum drive velocities
-        constexpr units::meters_per_second_t maxDriveVelocity = 4.25_mps;
+        constexpr units::meters_per_second_t maxDriveVelocity = 4.5_mps;
         constexpr units::radians_per_second_t maxAngularVelocity {1.5 * std::numbers::pi};
 
         constexpr units::meters_per_second_t slowMaxDriveVelocity = 1.5_mps;
@@ -29,6 +29,8 @@ namespace constants
         constexpr units::meter_t moduleDistanceX = 0.27305_m; 
         constexpr units::meter_t moduleDistanceY = 0.27305_m; 
         constexpr units::meter_t radiusToModules = 0.38615_m; 
+        
+        constexpr double rampRateSeconds = 0.1;
 
         // Swerve drive gear ratio 
         constexpr double driveGearRatio = 6.75;
@@ -66,7 +68,7 @@ namespace constants
             // Maximum angular acceleration (rad/s^2)
             constexpr units::radians_per_second_squared_t maxAcceleration {10 * std::numbers::pi}; 
 
-            constexpr units::radian_t tolerance = 0.1_deg;
+            constexpr units::radian_t tolerance = 0.2_deg;
         }
 
         // Drive motor PID values
@@ -88,11 +90,11 @@ namespace constants
         // Heading lock PID values 
         namespace headingPID 
         {
-            constexpr double p = 1.5;
+            constexpr double p = 3.0;
             constexpr double i = 0.0;
             constexpr double d = 0.0;
-            constexpr units::radians_per_second_t ff = 0.15_rad_per_s;
-            constexpr units::radian_t tolerance = 1.0_deg;
+            constexpr units::radians_per_second_t ff = 0.1_rad_per_s;
+            constexpr units::radian_t tolerance = 2.0_deg;
         }
 
         // Preference keys for testing

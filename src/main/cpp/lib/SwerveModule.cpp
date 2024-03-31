@@ -3,6 +3,7 @@
 #include "constants/GeneralConstants.h"
 #include "constants/DriveConstants.h"
 #include <units/math.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 SwerveModule::SwerveModule(std::string name, int driveMotorCanID, int turnMotorCanID, int canCoderCanID, units::radian_t canCoderOffset)
     : m_name(name), m_encoderOffset(canCoderOffset)
@@ -10,8 +11,8 @@ SwerveModule::SwerveModule(std::string name, int driveMotorCanID, int turnMotorC
     fmt::print("Initializing Swerve Module {}\n", name);
 
     m_driveMotor = std::make_unique<rev::CANSparkMax>(driveMotorCanID, rev::CANSparkMax::MotorType::kBrushless);
-    
     m_driveMotor->SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
+    // m_driveMotor->SetOpenLoopRampRate(constants::drive::rampRateSeconds);
 
     m_turnMotor = std::make_unique<rev::CANSparkMax>(turnMotorCanID, rev::CANSparkMax::MotorType::kBrushless);
     m_turnMotor->SetInverted(true);
@@ -98,6 +99,10 @@ void SwerveModule::Periodic()
    
     // if(m_name == "Swerve Module (FL)")
     //     fmt::print("Target velocity: {} m/s, velocity: {} m/s, voltage: {}V\n", targetVelocity.value(), velocity.value(), driveOutput.value());
+
+    frc::SmartDashboard::PutNumber(m_name + " Speed (m/s)", velocity.value());
+    frc::SmartDashboard::PutNumber(m_name + " Commanded Speed (m/s)", targetVelocity.value());
+    frc::SmartDashboard::PutNumber(m_name + " Output Voltage", driveOutput.value());
 
     units::radian_t angle = GetTurnAngle();
     units::volt_t turnOutput { m_turnPID->Calculate(angle) };
