@@ -13,6 +13,9 @@ namespace constants
 
     constexpr bool enableSysId = false;
 
+    // Neo and Neo 550 encoder counts per revolution
+    constexpr int encoderCountsPerRev = 42;
+
     namespace controls 
     {
         constexpr double joystickDeadband = 0.08;

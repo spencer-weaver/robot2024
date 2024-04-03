@@ -4,12 +4,12 @@
 
 namespace ClimberCommands
 {
-    frc2::CommandPtr RaiseHook(Climber* climber)
+    frc2::CommandPtr RaiseHook(Climber* climber, frc::XboxController* controller)
     {
         return frc2::cmd::StartEnd(
             // Start
-            [climber] {
-                if(!climber->ReachedMaxPosition())
+            [climber, controller] {
+                if(!climber->ReachedMaxPosition() || controller->GetPOV() == 180)
                     climber->SetVoltage(constants::climber::motorVoltage); 
             },
             
@@ -17,15 +17,15 @@ namespace ClimberCommands
             [climber] {climber->Stop(); },
 
             {climber}
-        ).Until([climber] { return climber->ReachedMaxPosition(); /*  || climber->CurrentLimitReached(); */ });
+        ).Until([climber, controller] { return climber->ReachedMinPosition() && controller->GetPOV() != 180; /*  || climber->CurrentLimitReached(); */ });
     }
 
-    frc2::CommandPtr LowerHook(Climber* climber)
+    frc2::CommandPtr LowerHook(Climber* climber, frc::XboxController* controller)
     {
         return frc2::cmd::StartEnd(
             // Start
-            [climber] {
-                if(!climber->ReachedMinPosition())
+            [climber, controller] {
+                if(!climber->ReachedMinPosition() || controller->GetPOV() == 180)
                     climber->SetVoltage(-constants::climber::motorVoltage); 
             },
             
@@ -33,7 +33,7 @@ namespace ClimberCommands
             [climber] {climber->Stop(); },
 
             {climber}
-        ).Until([climber] { return climber->ReachedMinPosition(); /*  || climber->CurrentLimitReached();  */});
+        ).Until([climber, controller] { return climber->ReachedMinPosition() && controller->GetPOV() != 180; /*  || climber->CurrentLimitReached();  */});
     }
 
     frc2::CommandPtr StopClimber(Climber* climber)

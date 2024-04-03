@@ -1,6 +1,7 @@
 #include "subsystems/Climber.h"
 #include "constants/Ports.h"
 #include "constants/ClimberConstants.h"
+#include "constants/GeneralConstants.h"
 #include <units/current.h>
 
 Climber::Climber(frc::PowerDistribution& pdh)
@@ -14,10 +15,12 @@ Climber::Climber(frc::PowerDistribution& pdh)
     m_motor2->SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
     m_motor2->SetInverted(true);
 
-    m_encoder1 = std::make_unique<rev::SparkRelativeEncoder>(m_motor1->GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor));
+    m_encoder1 = std::make_unique<rev::SparkRelativeEncoder>(
+        m_motor1->GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor, constants::encoderCountsPerRev));
     m_encoder1->SetPosition(0);
 
-    m_encoder2 = std::make_unique<rev::SparkRelativeEncoder>(m_motor2->GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor));
+    m_encoder2 = std::make_unique<rev::SparkRelativeEncoder>(
+        m_motor2->GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor, constants::encoderCountsPerRev));
     m_encoder2->SetPosition(0);
 }
 

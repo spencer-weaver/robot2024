@@ -69,4 +69,5 @@ void DriveCommand::Execute()
     }
 
     m_driveBase->Drive(velocityX, velocityY, angularVelocity, !m_driveBase->IsTrackingEnabled());
+    // m_driveBase->Drive(velocityX, velocityY, angularVelocity, true);
 }

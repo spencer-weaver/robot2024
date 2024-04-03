@@ -45,7 +45,10 @@ public:
     void SetDriveControlMode(ControlMode controlMode);
     ControlMode GetDriveControlMode() const;
 
+    void SetNavXHeading(units::radian_t heading);
+
     units::radian_t GetHeading();
+    frc::Rotation2d GetRotation2d();
     void ZeroHeading();
 
     frc::Pose2d GetPose() const;
@@ -73,6 +76,8 @@ private:
     // Swerve odometry
     std::unique_ptr<frc::SwerveDrivePoseEstimator<4>> m_poseEstimator {};
     frc::Field2d m_field;
+
+    units::radian_t m_navXOffset {0};
 
     // NavX IMU 
     AHRS m_navX {frc::SerialPort::kUSB1};

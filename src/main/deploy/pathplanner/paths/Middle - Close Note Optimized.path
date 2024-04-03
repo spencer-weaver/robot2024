@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8984042390909313,
-        "y": 5.773442417070284
+        "x": 2.3600000000000003,
+        "y": 5.55
       },
       "isLocked": false,
       "linkedName": "Blue 2, Red 2 Start"
     },
     {
       "anchor": {
-        "x": 2.95,
-        "y": 6.98
+        "x": 2.85,
+        "y": 5.55
       },
       "prevControl": {
-        "x": 2.4728276488034235,
-        "y": 6.589856445643746
+        "x": 2.99,
+        "y": 5.55
       },
       "nextControl": {
-        "x": 3.336307662372813,
-        "y": 7.29585116802188
+        "x": 2.71,
+        "y": 5.55
       },
       "isLocked": false,
       "linkedName": null
@@ -36,31 +36,32 @@
         "y": 5.55
       },
       "prevControl": {
-        "x": 3.226307662372813,
-        "y": 5.562647359246215
+        "x": 2.36,
+        "y": 5.55
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Blue 2, Red 2 Start"
     }
   ],
-  "rotationTargets": [
+  "rotationTargets": [],
+  "constraintZones": [
     {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 65.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 1.4,
-      "rotationDegrees": 65.0,
-      "rotateFast": false
+      "name": "Slow End",
+      "minWaypointRelativePos": 1.8,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 4.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
     }
   ],
-  "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Intake In",
-      "waypointRelativePos": 0.3,
+      "name": "RunIntake",
+      "waypointRelativePos": 0.2,
       "command": {
         "type": "parallel",
         "data": {
@@ -76,8 +77,8 @@
       }
     },
     {
-      "name": "Run Wheels",
-      "waypointRelativePos": 1.65,
+      "name": "RunWheels",
+      "waypointRelativePos": 1.75,
       "command": {
         "type": "parallel",
         "data": {
@@ -95,7 +96,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 2.5,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -105,10 +106,10 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Middle",
+  "folder": "Middle Optimized",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

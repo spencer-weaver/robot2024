@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8984042390909313,
-        "y": 5.773442417070284
+        "x": 2.0283806616115356,
+        "y": 6.0193699845316955
       },
       "isLocked": false,
       "linkedName": "Blue 2, Red 2 Start"
     },
     {
       "anchor": {
-        "x": 2.95,
-        "y": 6.98
+        "x": 2.84,
+        "y": 6.856
       },
       "prevControl": {
-        "x": 2.4728276488034235,
-        "y": 6.589856445643746
+        "x": 2.510235796534359,
+        "y": 6.510911811820771
       },
       "nextControl": {
-        "x": 3.336307662372813,
-        "y": 7.29585116802188
+        "x": 2.9751291296965356,
+        "y": 6.997408515682244
       },
       "isLocked": false,
       "linkedName": null
@@ -36,23 +36,23 @@
         "y": 5.55
       },
       "prevControl": {
-        "x": 3.226307662372813,
-        "y": 5.562647359246215
+        "x": 2.0166698250657547,
+        "y": 6.05450249416904
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Blue 2, Red 2 Start"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 65.0,
+      "waypointRelativePos": 0.35,
+      "rotationDegrees": 55.0,
       "rotateFast": false
     },
     {
       "waypointRelativePos": 1.4,
-      "rotationDegrees": 65.0,
+      "rotationDegrees": 55.0,
       "rotateFast": false
     }
   ],
@@ -60,7 +60,7 @@
   "eventMarkers": [
     {
       "name": "Intake In",
-      "waypointRelativePos": 0.3,
+      "waypointRelativePos": 0.35,
       "command": {
         "type": "parallel",
         "data": {
@@ -76,8 +76,8 @@
       }
     },
     {
-      "name": "Run Wheels",
-      "waypointRelativePos": 1.65,
+      "name": "RunWheels",
+      "waypointRelativePos": 1.7,
       "command": {
         "type": "parallel",
         "data": {
@@ -95,7 +95,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 2.5,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -105,10 +105,10 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Middle",
+  "folder": "Middle Optimized",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

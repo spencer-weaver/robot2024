@@ -91,7 +91,9 @@ DriveBase::DriveBase(Vision& vision)
         [this] () { return this->GetPose(); },
 
         // Reset pose
-        [this] (frc::Pose2d pose) { this->ResetPose(pose); },
+        [this] (frc::Pose2d pose) { 
+            this->ResetPose(pose); 
+        },
 
         // Get robot-relative speeds
         [this] () { return this->GetChassisSpeeds(); },
@@ -129,7 +131,7 @@ void DriveBase::Periodic()
         swerveModule->Periodic();
     }
 
-    m_poseEstimator->Update(m_navX.GetRotation2d(), GetSwerveModulePositions());
+    m_poseEstimator->Update(GetRotation2d(), GetSwerveModulePositions());
 
     VisionUpdate();
 
@@ -147,7 +149,7 @@ void DriveBase::Drive(units::meters_per_second_t velocityX, units::meters_per_se
 
     if(fieldRelative)
     {
-        frc::Rotation2d robotRotation = m_navX.GetRotation2d();
+        frc::Rotation2d robotRotation = GetRotation2d();
         chassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(velocityX, velocityY, angularVelocity, robotRotation);
     }
 
@@ -274,10 +276,17 @@ ControlMode DriveBase::GetDriveControlMode() const
     return m_controlMode;
 }
 
+void DriveBase::SetNavXHeading(units::radian_t heading)
+{
+    m_navXOffset = heading;
+    m_navX.ZeroYaw();
+}
+
 units::radian_t DriveBase::GetHeading()
 {
     units::degree_t heading {m_navX.GetYaw()};
-    return units::radian_t {heading};
+
+    return frc::AngleModulus(units::radian_t {heading} + m_navXOffset);
 
     // if(m_navX.IsAvailable())
     // {
@@ -288,6 +297,11 @@ units::radian_t DriveBase::GetHeading()
     // {
     //     return units::radian_t {0};
     // }
+}
+
+frc::Rotation2d DriveBase::GetRotation2d()
+{
+    return m_navX.GetRotation2d().RotateBy(frc::Rotation2d(m_navXOffset));
 }
 
 void DriveBase::ZeroHeading()
@@ -302,6 +316,7 @@ frc::Pose2d DriveBase::GetPose() const
 
 void DriveBase::ResetPose(frc::Pose2d pose)
 {
+    SetNavXHeading(pose.Rotation().Radians());
     m_poseEstimator->ResetPosition(GetHeading(), GetSwerveModulePositions(), pose);
 }
 

@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Bottom Far Note"
+            "pathName": "Bottom Far Note 5"
           }
         },
         {
@@ -32,6 +32,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Bottom",
   "choreoAuto": false
 }

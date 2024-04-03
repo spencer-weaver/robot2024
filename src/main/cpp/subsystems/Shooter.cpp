@@ -1,6 +1,7 @@
 #include "subsystems/Shooter.h"
 #include "constants/ShooterConstants.h"
 #include "constants/Ports.h"
+#include "constants/GeneralConstants.h"
 
 #include <units/voltage.h>
 #include <frc/RobotController.h>
@@ -39,11 +40,13 @@ Shooter::Shooter()
     // m_leftMotor->BurnFlash();
     // m_rightMotor->BurnFlash();
 
-    m_leftEncoder = std::make_unique<rev::SparkRelativeEncoder>(m_leftMotor->GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor));
+    m_leftEncoder = std::make_unique<rev::SparkRelativeEncoder>(
+        m_leftMotor->GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor, constants::encoderCountsPerRev));
     m_leftEncoder->SetAverageDepth(constants::shooter::encoderDepth);
     m_leftEncoder->SetMeasurementPeriod(constants::shooter::encoderPeriod);
     
-    m_rightEncoder = std::make_unique<rev::SparkRelativeEncoder>(m_rightMotor->GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor));
+    m_rightEncoder = std::make_unique<rev::SparkRelativeEncoder>(
+        m_rightMotor->GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor, constants::encoderCountsPerRev));
     m_rightEncoder->SetAverageDepth(constants::shooter::encoderDepth);
     m_rightEncoder->SetMeasurementPeriod(constants::shooter::encoderPeriod);
 

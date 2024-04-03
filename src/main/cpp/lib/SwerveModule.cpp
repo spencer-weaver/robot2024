@@ -20,7 +20,8 @@ SwerveModule::SwerveModule(std::string name, int driveMotorCanID, int turnMotorC
 
     m_turnEncoder = std::make_unique<ctre::phoenix6::hardware::CANcoder>(canCoderCanID);
 
-    m_driveEncoder = std::make_unique<rev::SparkRelativeEncoder>(m_driveMotor->GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor));
+    m_driveEncoder = std::make_unique<rev::SparkRelativeEncoder>(
+        m_driveMotor->GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor, constants::encoderCountsPerRev));
     m_driveEncoder->SetAverageDepth(constants::drive::driveEncoderDepth);
     m_driveEncoder->SetMeasurementPeriod(constants::drive::driveEncoderPeriod);
 

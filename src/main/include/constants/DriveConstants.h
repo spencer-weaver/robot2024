@@ -16,7 +16,7 @@ namespace constants
         
         // Maximum drive velocities
         constexpr units::meters_per_second_t maxDriveVelocity = 4.5_mps;
-        constexpr units::radians_per_second_t maxAngularVelocity {1.5 * std::numbers::pi};
+        constexpr units::radians_per_second_t maxAngularVelocity {3.0 * std::numbers::pi};
 
         constexpr units::meters_per_second_t slowMaxDriveVelocity = 1.5_mps;
         constexpr units::radians_per_second_t slowMaxAngularVelocity {1.0 * std::numbers::pi};
@@ -57,7 +57,7 @@ namespace constants
         // Turn motor profiled PIDF values
         namespace turnPID  
         {
-            constexpr double p = 7.0;
+            constexpr double p = 7.5;
             constexpr double i = 0.0;
             constexpr double d = 0.0;
             constexpr double f = 0.12;
@@ -74,16 +74,16 @@ namespace constants
         // Drive motor PID values
         namespace drivePID 
         {
-            constexpr double p = 1.0;
-            constexpr double i = 0.05;
+            constexpr double p = 1.5;
+            constexpr double i = 0.0;
             constexpr double d = 0.0;
         }
 
         // Drive motor feedforward values
         namespace driveFF
         {
-            constexpr auto s = 0.2_V; 
-            constexpr auto v = 1.5_V * 1.0_s / 1.0_m;
+            constexpr auto s = 0.12_V; 
+            constexpr auto v = 2.6_V * 1.0_s / 1.0_m;
             constexpr auto a = 0.0_V * 1.0_s * 1.0_s / 1.0_m;
         }
 
@@ -93,7 +93,7 @@ namespace constants
             constexpr double p = 3.0;
             constexpr double i = 0.0;
             constexpr double d = 0.0;
-            constexpr units::radians_per_second_t ff = 0.1_rad_per_s;
+            constexpr units::radians_per_second_t ff = 6_deg_per_s; // 0.1_rad_per_s;
             constexpr units::radian_t tolerance = 2.0_deg;
         }
 
