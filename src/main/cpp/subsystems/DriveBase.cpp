@@ -16,9 +16,6 @@
 DriveBase::DriveBase(Vision& vision)
     : m_vision(vision)
 {
-    // frc::SmartDashboard::PutBoolean("Cosine scaling", true);
-    // frc::SmartDashboard::PutNumber("Cosine scaling exponent", constants::drive::cosineScalingExponent);
-
     fmt::print("\nInitializing DriveBase...\n");
 
     m_swerveModules[0] = std::make_unique<SwerveModule>(
@@ -50,15 +47,6 @@ DriveBase::DriveBase(Vision& vision)
         ports::drive::CANCoder::backRight,
         constants::drive::encoderOffsets::backRight);
     m_swerveModules[3]->SetDriveMotorInverted(true);
-
-    // if(m_navX.IsAvailable())
-    // {
-    //     ZeroHeading();
-    // }
-    // else 
-    // {
-    //     fmt::print("NavX is not available: Field-oriented drive and odometry are disabled.\n");
-    // }
      
     m_kinematics = std::make_unique<frc::SwerveDriveKinematics<4>>(
         frc::Translation2d( constants::drive::moduleDistanceX,  constants::drive::moduleDistanceY),
@@ -287,16 +275,6 @@ units::radian_t DriveBase::GetHeading()
     units::degree_t heading {m_navX.GetYaw()};
 
     return frc::AngleModulus(units::radian_t {heading} + m_navXOffset);
-
-    // if(m_navX.IsAvailable())
-    // {
-    //     units::degree_t heading {m_navX.Get().GetYaw()};
-    //     return units::radian_t {heading};
-    // }
-    // else 
-    // {
-    //     return units::radian_t {0};
-    // }
 }
 
 frc::Rotation2d DriveBase::GetRotation2d()
@@ -414,13 +392,6 @@ void DriveBase::InitializePreferences()
     frc::Preferences::InitDouble(constants::drive::preferences::turnV_Key, constants::drive::turnPID::maxVelocity.value());
     frc::Preferences::InitDouble(constants::drive::preferences::turnA_Key, constants::drive::turnPID::maxAcceleration.value());
 
-    /*
-    frc::Preferences::InitDouble(constants::drive::preferences::offsetFL_Key, constants::drive::encoder_offsets::frontLeft.value());
-    frc::Preferences::InitDouble(constants::drive::preferences::offsetFR_Key, constants::drive::encoder_offsets::frontRight.value());
-    frc::Preferences::InitDouble(constants::drive::preferences::offsetBL_Key, constants::drive::encoder_offsets::backLeft.value());
-    frc::Preferences::InitDouble(constants::drive::preferences::offsetBR_Key, constants::drive::encoder_offsets::backRight.value());
-    */
-
     LoadPreferences();
 }
 
@@ -439,19 +410,9 @@ void DriveBase::LoadPreferences()
     units::radians_per_second_t turnV { frc::Preferences::GetDouble(constants::drive::preferences::turnV_Key) };
     units::radians_per_second_squared_t turnA { frc::Preferences::GetDouble(constants::drive::preferences::turnA_Key) };
 
-    // units::radian_t offsetFL { frc::Preferences::GetDouble(constants::preferences::offsetFL_Key) };
-    // units::radian_t offsetFR { frc::Preferences::GetDouble(constants::preferences::offsetFR_Key) };
-    // units::radian_t offsetBL { frc::Preferences::GetDouble(constants::preferences::offsetBL_Key) };
-    // units::radian_t offsetBR { frc::Preferences::GetDouble(constants::preferences::offsetBR_Key) };
-
     for(std::unique_ptr<SwerveModule>& swerveModule : m_swerveModules)
     {
         swerveModule->UpdateDriveController(driveP, driveI, driveD, driveFF_S, driveFF_V);
         swerveModule->UpdateTurnController(turnP, turnI, turnD, turnF, turnV, turnA);
     }
-
-    // m_swerveModules[0]->UpdateTurnEncoderOffset(offsetFL);
-    // m_swerveModules[1]->UpdateTurnEncoderOffset(offsetFR);
-    // m_swerveModules[2]->UpdateTurnEncoderOffset(offsetBL);
-    // m_swerveModules[3]->UpdateTurnEncoderOffset(offsetBR);
 }
