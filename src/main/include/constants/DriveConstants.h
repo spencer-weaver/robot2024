@@ -16,7 +16,7 @@ namespace constants
         
         // Maximum drive velocities
         constexpr units::meters_per_second_t maxDriveVelocity = 4.5_mps;
-        constexpr units::radians_per_second_t maxAngularVelocity {3.0 * std::numbers::pi};
+        constexpr units::radians_per_second_t maxAngularVelocity {2.25 * std::numbers::pi};
 
         constexpr units::meters_per_second_t slowMaxDriveVelocity = 1.5_mps;
         constexpr units::radians_per_second_t slowMaxAngularVelocity {1.0 * std::numbers::pi};

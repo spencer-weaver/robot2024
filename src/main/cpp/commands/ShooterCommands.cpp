@@ -45,7 +45,7 @@ namespace ShooterCommands
                 frc2::cmd::WaitUntil([intake] { return !intake->IsNoteDetected(); })
                     .WithTimeout(0.5_s)
             )
-            .AndThen(frc2::cmd::Wait(0.75_s))
+            .AndThen(frc2::cmd::Wait(0.2_s))
             .FinallyDo([intake, shooter] {
                 intake->StopIntake();
                 shooter->StopShooter();

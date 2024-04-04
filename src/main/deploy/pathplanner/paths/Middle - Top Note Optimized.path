@@ -16,15 +16,15 @@
     },
     {
       "anchor": {
-        "x": 2.84,
+        "x": 2.83,
         "y": 6.856
       },
       "prevControl": {
-        "x": 2.510235796534359,
+        "x": 2.5002357965343593,
         "y": 6.510911811820771
       },
       "nextControl": {
-        "x": 2.9751291296965356,
+        "x": 2.965129129696536,
         "y": 6.997408515682244
       },
       "isLocked": false,
@@ -77,7 +77,7 @@
     },
     {
       "name": "RunWheels",
-      "waypointRelativePos": 1.7,
+      "waypointRelativePos": 1.55,
       "command": {
         "type": "parallel",
         "data": {

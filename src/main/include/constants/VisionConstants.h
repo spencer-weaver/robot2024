@@ -26,8 +26,8 @@ namespace constants
         constexpr units::meter_t maxTagDistance = 4.0_m;
   
         // Default standard deviations 
-        constexpr wpi::array<double, 3U> singleTagStdDevs {4.0, 4.0, 8.0};
-        constexpr wpi::array<double, 3U> multiTagStdDevs {0.8, 0.8, 1.6};
+        constexpr wpi::array<double, 3U> singleTagStdDevs {3.75, 3.75, 7.5};
+        constexpr wpi::array<double, 3U> multiTagStdDevs {0.75, 0.75, 1.5};
 
         // Standard deviations scale factor (scaled as: distance^2 * stdDevsScaleFactor)
         constexpr double stdDevsScaleFactor = 1.0 / 30.0;
@@ -36,7 +36,7 @@ namespace constants
         {
             constexpr std::string_view name = "Front Arducam";
             const frc::Translation3d relativePosition {2.0_in, -6.25_in, 16.0_in};
-            const frc::Rotation3d relativeRotation {180_deg, -26.0_deg, 0.0_deg};
+            const frc::Rotation3d relativeRotation {180_deg, -29.0_deg, 0.0_deg};
         }
 
         namespace backCamera
