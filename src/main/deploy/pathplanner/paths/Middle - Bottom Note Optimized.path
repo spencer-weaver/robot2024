@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1806215367066955,
-        "y": 4.66091294522104
+        "x": 2.098645680886225,
+        "y": 4.20419031993556
       },
       "isLocked": false,
       "linkedName": "Blue 2, Red 2 Start"
@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 2.65,
-        "y": 4.12
+        "y": 4.11
       },
       "prevControl": {
         "x": 2.311151575256073,
-        "y": 4.196768646843998
+        "y": 4.186768646843999
       },
       "nextControl": {
         "x": 3.0905561927325644,
-        "y": 4.020188697054201
+        "y": 4.010188697054201
       },
       "isLocked": false,
       "linkedName": null
@@ -47,7 +47,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.55,
-      "rotationDegrees": -14.0,
+      "rotationDegrees": -12.0,
       "rotateFast": false
     }
   ],
@@ -90,7 +90,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

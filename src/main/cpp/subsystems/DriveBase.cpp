@@ -6,6 +6,7 @@
 #include <frc/geometry/Translation2d.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
 
 #include "constants/Ports.h"
 #include "constants/DriveConstants.h"
@@ -104,10 +105,26 @@ DriveBase::DriveBase(Vision& vision)
 
         this
     );
+
+    // pathplanner::PPHolonomicDriveController::setRotationTargetOverride([this] () {
+    //    return GetTargetRotationOverride();
+    // });
     
     frc::SmartDashboard::PutData("Field", &m_field);
     
     fmt::print("DriveBase Initialization complete\n\n");
+}
+
+std::optional<units::radian_t> DriveBase::GetTargetRotationOverride()
+{
+    // std::optional<units::radian_t> angleToTarget = m_vision.GetTargetAngle();
+
+    // if(angleToTarget)
+    // {
+    //     return frc::AngleModulus(angleToTarget.value() + GetHeading());
+    // }
+
+    return std::nullopt;
 }
 
 void DriveBase::Periodic()
@@ -125,6 +142,8 @@ void DriveBase::Periodic()
 
     frc::SmartDashboard::PutNumber("X", GetPose().X().value());
     frc::SmartDashboard::PutNumber("Y", GetPose().Y().value());
+    frc::SmartDashboard::PutBoolean("NavX calibrating", m_navX.IsCalibrating());
+    frc::SmartDashboard::PutBoolean("NavX connected", m_navX.IsConnected());
 
     m_field.SetRobotPose(GetPose());
 }
@@ -149,9 +168,8 @@ void DriveBase::Drive(frc::ChassisSpeeds chassisSpeeds)
     // If tracking an object, rotate towards
     if(m_tracking)
     {
-        // double heading = GetHeading().value();
-
-        units::radians_per_second_t outputAngularVelocity { m_headingPID->Calculate(m_angleToObject.value()) };
+        units::radian_t heading = GetHeading();
+        units::radians_per_second_t outputAngularVelocity { -m_headingPID->Calculate(heading.value()) };
         outputAngularVelocity += constants::drive::headingPID::ff * util::sign(outputAngularVelocity);
 
         fmt::print("Output angular velocity: {}\n", outputAngularVelocity);
@@ -231,13 +249,20 @@ void DriveBase::VisionUpdate()
     }
 }
 
-void DriveBase::TrackObject(units::radian_t heading)
+void DriveBase::TrackHeading(units::radian_t heading)
 {
     heading = frc::AngleModulus(heading);
-    m_angleToObject = heading;
-    //m_headingPID->SetSetpoint(heading.value());
+    m_headingPID->SetSetpoint(heading.value());
     m_tracking = true;
 }
+
+// void DriveBase::TrackObject(units::radian_t heading)
+// {
+//     heading = frc::AngleModulus(heading);
+//     m_angleToObject = heading;
+//     //m_headingPID->SetSetpoint(heading.value());
+//     m_tracking = true;
+// }
 
 void DriveBase::DisableTracking()
 {

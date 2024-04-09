@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 8.2,
-        "y": 2.43
+        "x": 8.25,
+        "y": 2.46
       },
       "prevControl": {
-        "x": 7.942361595992805,
-        "y": 2.1957832690843704
+        "x": 7.992361595992806,
+        "y": 2.22578326908437
       },
       "nextControl": {
-        "x": 8.556859605973596,
-        "y": 2.754417823612359
+        "x": 8.606859605973597,
+        "y": 2.7844178236123587
       },
       "isLocked": false,
       "linkedName": null
@@ -47,7 +47,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.8,
-      "rotationDegrees": 30.0,
+      "rotationDegrees": 28.0,
       "rotateFast": true
     }
   ],
@@ -55,7 +55,7 @@
   "eventMarkers": [
     {
       "name": "RunIntake",
-      "waypointRelativePos": 0.55,
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "parallel",
         "data": {
@@ -90,7 +90,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.25,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

@@ -31,15 +31,19 @@ void DriveCommand::Execute()
         std::optional<units::radian_t> angleToTarget = m_vision.GetTargetAngle();
         if(angleToTarget)
         {
-            fmt::print("Angle to object: {}\n", angleToTarget.value());
-            m_driveBase->TrackObject(angleToTarget.value());
+            units::radian_t heading = m_driveBase->GetHeading();
+            units::radian_t targetHeading = heading + angleToTarget.value();
+            fmt::print("Angle to object: {}, Target: {}\n", angleToTarget.value(), targetHeading);
 
-            velocityY = 0_mps;
+            m_driveBase->TrackHeading(targetHeading);
+            // velocityY = 0_mps;
         }
         else 
         {
             fmt::print("No target found\n");
         }
+
+        angularVelocity = 0_rad_per_s;
 
         // velocityX = util::sign(leftY) * -std::abs(std::pow(leftY, 2.0)) * constants::drive::slowMaxDriveVelocity;
         // velocityY = util::sign(leftX) * -std::abs(std::pow(leftX, 2.0)) * constants::drive::slowMaxDriveVelocity;
@@ -68,6 +72,6 @@ void DriveCommand::Execute()
         m_driveBase->DisableTracking();
     }
 
-    m_driveBase->Drive(velocityX, velocityY, angularVelocity, !m_driveBase->IsTrackingEnabled());
-    // m_driveBase->Drive(velocityX, velocityY, angularVelocity, true);
+    //m_driveBase->Drive(velocityX, velocityY, angularVelocity, !m_driveBase->IsTrackingEnabled());
+    m_driveBase->Drive(velocityX, velocityY, angularVelocity, true);
 }

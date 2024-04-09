@@ -11,7 +11,6 @@
 #include <frc2/command/button/POVButton.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
-#include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <pathplanner/lib/auto/NamedCommands.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
@@ -49,10 +48,6 @@ RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("RunIntake", IntakeCommands::RunIntake(&m_intake).WithTimeout(constants::autonomous::intakeTimeLimit));
   pathplanner::NamedCommands::registerCommand("ShootToSpeaker", ShooterCommands::ShootToSpeaker(&m_shooter, &m_intake));
   pathplanner::NamedCommands::registerCommand("RunShooterWheels", ShooterCommands::RunShooterWheels(&m_shooter, constants::shooter::speakerShootSpeed));
-
-  // pathplanner::PPHolonomicDriveController::setRotationTargetOverride([this] () {
-  //   return m_vision.GetTargetAngle();
-  // });
 }
 
 void RobotContainer::ConfigureDriveControls() 
@@ -75,15 +70,22 @@ void RobotContainer::ConfigureShooterControls()
     .OnTrue(
       frc2::cmd::RunOnce([this] {
         m_driveController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1.0);
+        m_shooterController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1.0);
       })
-      .AndThen(frc2::cmd::Wait(0.1_s))
+      .AndThen(frc2::cmd::Wait(0.15_s))
       .FinallyDo([this] {
         m_driveController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
+        m_shooterController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
       }));
 
   frc2::POVButton(&m_shooterController, 0)
     .WhileTrue(ShooterCommands::RunShooterWheels(&m_shooter, constants::shooter::speakerShootSpeed))
     .OnFalse(ShooterCommands::StopShooterWheels(&m_shooter));
+
+  frc2::POVButton(&m_shooterController, 90)
+    .WhileTrue(ShooterCommands::RunShooterWheels(&m_shooter, constants::shooter::passShootSpeed))
+    .OnFalse(ShooterCommands::StopShooterWheels(&m_shooter));
+    
 
   // Shoot to speaker with X
   frc2::JoystickButton(&m_shooterController, frc::XboxController::Button::kX)
@@ -92,7 +94,7 @@ void RobotContainer::ConfigureShooterControls()
     
   // Shoot across field
   frc2::JoystickButton(&m_shooterController, frc::XboxController::Button::kY)
-    .OnTrue(ShooterCommands::Shoot(&m_shooter, &m_intake, 5250_rpm));
+    .OnTrue(ShooterCommands::Shoot(&m_shooter, &m_intake, constants::shooter::passShootSpeed));
     //.OnTrue(ShooterCommands::ShootToAmp(&m_shooter, &m_intake));
     //.OnFalse(ShooterCommands::StopShooterWheels(&m_shooter));
 
@@ -126,6 +128,8 @@ void RobotContainer::ConfigureShooterControls()
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   std::string autoName = m_autoChooser.GetSelected();
+
+  fmt::print("Auto command received: '{}'\n", autoName);
 
   if(autoName == constants::autonomous::noneAuto || autoName == "")
     return frc2::cmd::None();

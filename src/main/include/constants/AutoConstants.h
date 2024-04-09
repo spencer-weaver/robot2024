@@ -18,6 +18,7 @@ namespace constants
         const std::string autoNames[] = {
             "Top - Two Note",
             "Top - Three Note",
+            "Top - Four Note",
 
             "Middle - Two Note",
             "Middle - Three Note Top",
@@ -30,7 +31,9 @@ namespace constants
             "Bottom - Two Note",
             "Bottom - Two Note Far",
             "Bottom - Three Note Close",
-            "Bottom - Three Note Far"
+            "Bottom - Three Note Far",
+
+            "test"
         };
 
         constexpr pathplanner::HolonomicPathFollowerConfig pathFollowerConfig(

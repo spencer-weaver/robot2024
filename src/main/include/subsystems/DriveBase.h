@@ -38,9 +38,12 @@ public:
 
     void VisionUpdate();
 
-    void TrackObject(units::radian_t heading);
+    void TrackHeading(units::radian_t heading);
+    // void TrackObject(units::radian_t heading);
     void DisableTracking();
     bool IsTrackingEnabled() const;
+
+    std::optional<units::radian_t> GetTargetRotationOverride();
 
     void SetDriveControlMode(ControlMode controlMode);
     ControlMode GetDriveControlMode() const;
@@ -90,7 +93,7 @@ private:
 
     // PID controller to lock/maintain heading
     std::unique_ptr<frc::PIDController> m_headingPID {};
-    units::radian_t m_angleToObject {};
+    // units::radian_t m_angleToObject {};
     bool m_tracking = false;
 
     std::unique_ptr<frc2::sysid::SysIdRoutine> m_sysIdRoutine;

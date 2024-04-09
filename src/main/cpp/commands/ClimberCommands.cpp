@@ -26,7 +26,7 @@ namespace ClimberCommands
             // Start
             [climber, controller] {
                 if(!climber->ReachedMinPosition() || controller->GetPOV() == 180)
-                    climber->SetVoltage(-constants::climber::motorVoltage); 
+                    climber->SetVoltage(-constants::climber::climbLowerVoltage); 
             },
             
             // End

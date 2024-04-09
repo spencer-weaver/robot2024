@@ -12,7 +12,7 @@ namespace constants
     {
         // Motor voltage limits
         constexpr units::volt_t maxDriveVoltage = 12.0_V;
-        constexpr units::volt_t maxTurnVoltage = 9.0_V;
+        constexpr units::volt_t maxTurnVoltage = 10.0_V;
         
         // Maximum drive velocities
         constexpr units::meters_per_second_t maxDriveVelocity = 4.5_mps;
@@ -35,7 +35,7 @@ namespace constants
         // Swerve drive gear ratio 
         constexpr double driveGearRatio = 6.75;
 
-        constexpr double driveMeasurementFudgeFactor = 0.975; // To match expected real-world measurements
+        constexpr double driveMeasurementFudgeFactor = 0.97; // To match expected real-world measurements
         constexpr double angularVelocityFudgeFactor = 6.0; // To account for lateral drift
 
         // Drive encoder measurement values

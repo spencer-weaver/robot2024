@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 8.2,
-        "y": 0.85
+        "x": 8.25,
+        "y": 0.8
       },
       "prevControl": {
-        "x": 8.937782702384236,
-        "y": 0.7680241441795296
+        "x": 8.987782702384237,
+        "y": 0.7180241441795296
       },
       "nextControl": {
-        "x": 7.640833165035772,
-        "y": 0.9121296483293583
+        "x": 7.690833165035773,
+        "y": 0.8621296483293583
       },
       "isLocked": false,
       "linkedName": null
@@ -55,7 +55,7 @@
   "eventMarkers": [
     {
       "name": "Intake In",
-      "waypointRelativePos": 0.6,
+      "waypointRelativePos": 0.55,
       "command": {
         "type": "parallel",
         "data": {
@@ -90,7 +90,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.25,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

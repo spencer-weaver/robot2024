@@ -20,6 +20,7 @@ namespace constants
 
         constexpr units::revolutions_per_minute_t speakerShootSpeed = 4000.0_rpm;
         constexpr units::revolutions_per_minute_t ampShootSpeed = 1000.0_rpm;
+        constexpr units::revolutions_per_minute_t passShootSpeed = 5250.0_rpm;
         
         constexpr units::volt_t speakerShootPower = 9.0_V;
         constexpr units::volt_t ampShootPower = 1.8_V;
@@ -52,14 +53,14 @@ namespace constants
         namespace feedforwardLeft
         {
             constexpr auto s = 0.123_V; 
-            constexpr auto v = 0.1215_V * 1.0_s / units::turn_t {1.0};
+            constexpr auto v = 0.1216_V * 1.0_s / units::turn_t {1.0};
             constexpr auto a = 0.0_V * 1.0_s * 1.0_s / units::turn_t {1.0};
         }
 
         namespace feedforwardRight
         {
             constexpr auto s = 0.123_V; 
-            constexpr auto v = 0.11825_V * 1.0_s / units::turn_t {1.0};
+            constexpr auto v = 0.119_V * 1.0_s / units::turn_t {1.0};
             constexpr auto a = 0.0_V * 1.0_s * 1.0_s / units::turn_t {1.0};
         }
     }

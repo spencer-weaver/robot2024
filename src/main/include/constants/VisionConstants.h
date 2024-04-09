@@ -24,6 +24,7 @@ namespace constants
 
         // Max distance (for single tag)
         constexpr units::meter_t maxTagDistance = 4.0_m;
+        constexpr units::meter_t maxMultiTagDistance = 5.0_m;
   
         // Default standard deviations 
         constexpr wpi::array<double, 3U> singleTagStdDevs {3.75, 3.75, 7.5};
@@ -42,8 +43,8 @@ namespace constants
         namespace backCamera
         {
             constexpr std::string_view name = "Back Arducam";
-            const frc::Translation3d relativePosition {-13.5_in, 6.25_in, 9.5_in};
-            const frc::Rotation3d relativeRotation {180_deg, -29.0_deg, 180.0_deg};
+            const frc::Translation3d relativePosition {-8.25_in, 6.75_in, 17.875_in};
+            const frc::Rotation3d relativeRotation {180_deg, -21.0_deg, 180.0_deg};
         }
 
         namespace objectCamera 

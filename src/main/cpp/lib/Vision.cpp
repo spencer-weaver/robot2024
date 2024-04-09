@@ -73,12 +73,12 @@ std::optional<VisionPoseResult> Vision::GetEstimatedPose(photon::PhotonPoseEstim
         double doubleMax = std::numeric_limits<double>::max();
         wpi::array<double, 3U> stdDevs { doubleMax, doubleMax, doubleMax };
 
-        if(numTargets > 1 && averageAmbiguity <= constants::vision::maxMultiTagAmbiguity && averageDistance <= constants::vision::maxTagDistance)
+        if(numTargets > 1 && averageAmbiguity <= constants::vision::maxMultiTagAmbiguity && averageDistance <= constants::vision::maxMultiTagDistance)
         {
             // Use pose estimation if more than one target was used
             stdDevs = constants::vision::multiTagStdDevs;
 
-            fmt::print("Using two targets\n");
+            // fmt::print("Using two targets\n");
         }
         else if(numTargets == 1 && 
             averageAmbiguity <= constants::vision::maxAmbiguity &&
@@ -87,14 +87,14 @@ std::optional<VisionPoseResult> Vision::GetEstimatedPose(photon::PhotonPoseEstim
             // Use pose estimation if one target was used, is below ambiguity threshold, and is within max range
             stdDevs = constants::vision::singleTagStdDevs;
             
-            fmt::print("Using single target\n");
+            // fmt::print("Using single target\n");
         }
         else 
         {
             // Discard pose estimation otherwise
             return std::nullopt;
 
-            fmt::print("Discarding target\n");
+            // fmt::print("Discarding target\n");
         }
 
         // Scale standard deviations by average tag distance squared
